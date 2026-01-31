@@ -3,6 +3,7 @@
 work/
 SoC_PJT/
 
+
 # Ignore auto-generated log and journal files
 *.log
 *.jou

@@ -27,6 +27,7 @@ Navigate into the parent folder (VIVADO_BLOCK_DESIGN_V01) and launch Vivado usin
 
 
 `cd VIVADO_BLOCK_DESIGN_V01`
+
 `vivado -mode gui -source master_tcl.tcl`
 
 IMPORTANT: The project setup will only initialize correctly if the script is invoked from the parent repository directory.

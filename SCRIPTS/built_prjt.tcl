@@ -37,9 +37,9 @@
 proc checkRequiredFiles { origin_dir} {
   set status true
   set files [list \
- "[file normalize "$origin_dir/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sources_1/new/s25fl128s.v"]"\
- "[file normalize "$origin_dir/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sim_1/new/uart_receiver.v"]"\
- "[file normalize "$origin_dir/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sim_1/new/TB.v"]"\
+ "[file normalize "$origin_dir/SoC_PJT/sim/s25fl128s.v"]"\
+ "[file normalize "$origin_dir/SoC_PJT/sim/uart_receiver.v"]"\
+ "[file normalize "$origin_dir/SoC_PJT/sim/TB.v"]"\
   ]
   foreach ifile $files {
     if { ![file isfile $ifile] } {
@@ -49,7 +49,7 @@ proc checkRequiredFiles { origin_dir} {
   }
 
   set paths [list \
- "[file normalize "$origin_dir/../SoC_PJT/IP_REPO"]"]"\
+ "[file normalize "$origin_dir/IP_REPO"]"]"\
   ]
   foreach ipath $paths {
     if { ![file isdirectory $ipath] } {
@@ -180,11 +180,15 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 # Set IP repository paths
 set obj [get_filesets sources_1]
 if { $obj != {} } {
-   set_property "ip_repo_paths" "[file normalize "$origin_dir/../IP_REPO"]" $obj
+   set_property "ip_repo_paths" "[file normalize "$origin_dir/IP_REPO"]" $obj
 
    # Rebuild user ip_repo's index before adding any source files
    update_ip_catalog -rebuild
 }
+
+set_property  ip_repo_paths  [file normalize "$origin_dir/IP_REPO"] [current_project]
+# Refresh the catalog so Vivado "sees" the IPs inside
+update_ip_catalog
 
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
@@ -195,9 +199,9 @@ set obj [get_filesets sources_1]
 # None
 
 # Set 'sources_1' fileset properties
-set obj [get_filesets sources_1]
-set_property -name "dataflow_viewer_settings" -value "min_width=16" -objects $obj
-set_property -name "top" -value "design_1_wrapper" -objects $obj
+#set obj [get_filesets sources_1]
+#set_property -name "dataflow_viewer_settings" -value "min_width=16" -objects $obj
+#set_property -name "top" -value "design_1_wrapper" -objects $obj
 
 # Create 'constrs_1' fileset (if not found)
 if {[string equal [get_filesets -quiet constrs_1] ""]} {
@@ -222,9 +226,9 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
 set obj [get_filesets sim_1]
 # Import local files from the original project
 set files [list \
- [file normalize "${origin_dir}/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sources_1/new/s25fl128s.v"]\
- [file normalize "${origin_dir}/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sim_1/new/uart_receiver.v"]\
- [file normalize "${origin_dir}/../SoC_PJT/project_1/project_1.srcs/sim_1/imports/project_1.srcs/sim_1/new/TB.v"]\
+ [file normalize "${origin_dir}/SoC_PJT/sim/s25fl128s.v"]\
+ [file normalize "${origin_dir}/SoC_PJT/sim/uart_receiver.v"]\
+ [file normalize "${origin_dir}/SoC_PJT/sim/TB.v"]\
 ]
 set imported_files ""
 foreach f $files {
@@ -266,6 +270,9 @@ set obj [get_filesets utils_1]
 
 # Set 'utils_1' fileset properties
 set obj [get_filesets utils_1]
+
+add_files -fileset sim_1 -norecurse [file normalize "${origin_dir}/SoC_PJT/flashmodelfiles/MFWH.mem"] 
+add_files -fileset sim_1 -norecurse [file normalize "${origin_dir}/SoC_PJT/flashmodelfiles/s25fl128sOTP.mem"] 
 
 
 # Adding sources referenced in BDs, if not already added

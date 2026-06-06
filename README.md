@@ -41,8 +41,6 @@ IMPORTANT: The project setup will only initialize correctly if the script is inv
 ### 3. Basic configuration
 Once the Vivado GUI opens and the project is created:
 
-- Open the block design, go into the UART Lite IP and change the baud rate to 115200.
-
 - Instantiate a BRAM IP block if not present using the add IP button.
 
 - Go into the picorv32_core_0 block and configure the following parameters
